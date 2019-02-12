@@ -19,33 +19,7 @@
 #include "../gettext_defs.h"
 #include <iostream>
 #include <string>
-#include <curl/curl.h>
-
-size_t read_response_body(char *contents, size_t size, size_t nmemb, void *userp)
-{
-  ((std::string *) userp)->append(contents, size * nmemb);
-  return size * nmemb;
-}
 
 void github_init_library()
 {
-  // Trigger gettext operations
-#ifdef ENABLE_NLS
-  bindtextdomain(PACKAGE, LOCALEDIR);
-#endif
-
-  curl_global_init(CURL_GLOBAL_ALL);
-
-  CURL *curl_handle = curl_easy_init();
-  std::string body;
-
-  curl_easy_setopt(curl_handle, CURLOPT_URL, "http://www.google.com/");
-  curl_easy_setopt(curl_handle, CURLOPT_VERBOSE, 1L);
-  curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, read_response_body);
-  curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, &body);
-
-  curl_easy_perform(curl_handle);
-  curl_easy_cleanup(curl_handle);
-
-  std::cout << body << std::endl;
 }
