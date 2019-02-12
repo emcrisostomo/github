@@ -33,7 +33,6 @@ namespace github
     static std::vector<repository> list(std::string user);
     static std::vector<repository> list_public();
 
-
   public:
     std::vector<repository> create();
     void destroy();
