@@ -15,12 +15,16 @@
 #
 set(LIBGITHUB_HEADER_FILES
     src/libgithub/c/libgithub.h
+    src/libgithub/c++/resources/repository.h
+    src/libgithub/c++/resources/topic.h
     src/libgithub/gettext.h
     src/libgithub/gettext_defs.h
     ${PROJECT_BINARY_DIR}/config.h)
 
 set(LIBGITHUB_SOURCE_FILES
-    src/libgithub/c/libgithub.cpp)
+    src/libgithub/c/libgithub.cpp
+    src/libgithub/c++/resources/repository.cpp
+    src/libgithub/c++/resources/topic.cpp)
 
 set(EXTRA_LIBS ${EXTRA_LIBS} ${CURL_LIBRARIES})
 
