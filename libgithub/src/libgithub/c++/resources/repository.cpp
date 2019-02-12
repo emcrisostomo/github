@@ -40,8 +40,10 @@ std::vector<github::repository> github::repository::list()
   curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, &body);
 
   struct curl_slist *headers = nullptr;
+  headers = curl_slist_append(headers, "Accept: application/vnd.github.v3+json");
   headers = curl_slist_append(headers, "cache-control: no-cache");
   headers = curl_slist_append(headers, "User-Agent: github C/CPP library");
+//  headers = curl_slist_append(headers, "Content-Type: application/json");
   curl_easy_setopt(curl_handle, CURLOPT_HTTPHEADER, headers);
 
   CURLcode res = curl_easy_perform(curl_handle);
