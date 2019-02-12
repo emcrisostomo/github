@@ -20,10 +20,12 @@
 #include <clocale>
 
 #ifdef HAVE_GETOPT_LONG
+
 #  include <getopt.h>
+
 #endif
 
-int main(int argc, char **argv)
+int main(int argc, char *argv[])
 {
   // Trigger gettext operations
 #ifdef ENABLE_NLS
