@@ -17,6 +17,7 @@
 #include "gettext.h"
 #include "github.hpp"
 #include "libgithub/c/libgithub.h"
+#include "libgithub/c++/resources/repository.h"
 #include <clocale>
 #include <string>
 #include <getopt.h>
@@ -44,7 +45,7 @@ int main(int argc, char **argv)
   if (!parse_optsss(argc, argv))
     return EXIT_FAILURE;
 
-  github_init_library();
+  github::repository::list();
 
   return 0;
 }
