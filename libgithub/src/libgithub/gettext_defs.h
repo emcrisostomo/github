@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Enrico M. Crisostomo
+ * Copyright (C) 2019 Enrico M. Crisostomo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,8 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef FSW_GETTEXT_DEFS_H
-#  define FSW_GETTEXT_DEFS_H
+#ifndef GH_GETTEXT_DEFS_H
+#  define GH_GETTEXT_DEFS_H
 
 #include "gettext.h"
 
@@ -30,4 +30,4 @@ extern "C"
 }
 #  endif
 
-#endif  /* FSW_GETTEXT_DEFS_H */
+#endif  // GH_GETTEXT_DEFS_H

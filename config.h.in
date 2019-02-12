@@ -7,3 +7,5 @@
 #cmakedefine PACKAGE_BUGREPORT "@PACKAGE_BUGREPORT@"
 #cmakedefine PACKAGE_TARNAME   "@PACKAGE_TARNAME@"
 #cmakedefine PACKAGE_URL       "@PACKAGE_URL@"
+#cmakedefine HAVE_GETOPT_H
+#cmakedefine HAVE_GETOPT_LONG
