@@ -54,12 +54,13 @@ static bool parse_optsss(int argc, char **argv)
   int ch;
   std::string short_options = "hv";
   int option_index = 0;
-  static struct option long_options[] = {
+  static struct option long_options[] =
+    {
       {"help",    no_argument, nullptr,       'h'},
       {"verbose", no_argument, nullptr,       'v'},
       {"version", no_argument, &version_flag, true},
       {nullptr, 0,             nullptr,       0}
-  };
+    };
 
   while ((ch = getopt_long(argc,
                            argv,
@@ -69,17 +70,21 @@ static bool parse_optsss(int argc, char **argv)
   {
     switch (ch)
     {
-      case 'h':
-        usage(std::cout);
-        return false;
+    case 'h':
+      usage(std::cout);
+      return false;
 
-      case 'v':
-        verbose_flag = true;
-        break;
+    case 'v':
+      verbose_flag = true;
+      break;
 
-      case '?':
-        usage(std::cerr);
-        return false;
+    case '?':
+      usage(std::cerr);
+      return false;
+
+    default:
+      std::cerr << _("Unknown option flag: ") << ch << "\n";
+      return false;
     }
   }
 
