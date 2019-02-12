@@ -24,6 +24,7 @@ add_executable(github ${GITHUB_SRC_FILES})
 # check for gettext and libintl
 if (USE_NLS)
   if (Intl_LIBRARIES)
+    target_include_directories(github PRIVATE ${Intl_INCLUDE_DIRS})
     target_link_libraries(github PRIVATE ${Intl_LIBRARIES})
   endif ()
 endif ()

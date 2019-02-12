@@ -30,13 +30,13 @@ set_target_properties(libgithub PROPERTIES PREFIX "")
 # check for gettext and libintl
 if (USE_NLS)
   if (Intl_LIBRARIES)
+    target_include_directories(libgithub PRIVATE ${Intl_INCLUDE_DIRS})
     target_link_libraries(libgithub PRIVATE ${Intl_LIBRARIES})
   endif ()
 endif ()
 
 target_include_directories(libgithub PRIVATE ..)
 target_include_directories(libgithub PUBLIC src)
-target_include_directories(libgithub PRIVATE ${Intl_INCLUDE_DIRS})
 target_include_directories(libgithub PRIVATE ${PROJECT_BINARY_DIR})
 target_link_libraries(libgithub PRIVATE ${EXTRA_LIBS})
 
