@@ -42,7 +42,7 @@ include(FindCURL)
 
 if (NOT CURL_FOUND)
   message(FATAL_ERROR "libcurl is required")
-endif()
+endif ()
 
 # check for gettext and libintl
 check_include_file_cxx(getopt.h HAVE_GETOPT_H)
@@ -50,6 +50,10 @@ check_include_file_cxx(getopt.h HAVE_GETOPT_H)
 if (HAVE_GETOPT_H)
   check_cxx_symbol_exists(getopt_long getopt.h HAVE_GETOPT_LONG)
 endif (HAVE_GETOPT_H)
+
+if (NOT HAVE_GETOPT_LONG)
+  message(FATAL_ERROR "getopt_long is required")
+endif ()
 
 # If both gettext and libintl are found, define the USE_NLS variable to
 # optionally disable them
@@ -63,11 +67,11 @@ if (USE_NLS)
   # gettext configuration
   set(LINGUAS en en@quot en@boldquot it es)
 
-#  foreach (language ${LINGUAS})
-#    configure_file(${PROJECT_SOURCE_DIR}/po/${language}.po ${PROJECT_BINARY_DIR}/${language}.po COPYONLY)
-#  endforeach ()
+  #  foreach (language ${LINGUAS})
+  #    configure_file(${PROJECT_SOURCE_DIR}/po/${language}.po ${PROJECT_BINARY_DIR}/${language}.po COPYONLY)
+  #  endforeach ()
 
-#  gettext_process_pot_file(po/${PACKAGE}.pot ALL INSTALL_DESTINATION share/locale LANGUAGES ${LINGUAS})
+  #  gettext_process_pot_file(po/${PACKAGE}.pot ALL INSTALL_DESTINATION share/locale LANGUAGES ${LINGUAS})
 endif ()
 
 # Add a configuration file processed by cmake
