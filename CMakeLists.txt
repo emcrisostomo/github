@@ -80,3 +80,16 @@ configure_file(${PROJECT_SOURCE_DIR}/config.h.in ${PROJECT_BINARY_DIR}/config.h)
 add_subdirectory(libgithub)
 add_subdirectory(github)
 
+# installer
+include(InstallRequiredSystemLibraries)
+#@formatter:off
+# Remove and default to project description when migrated to CMake 3.9
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A C and C++ GitHub API client")
+set(CPACK_PACKAGE_VERSION_MAJOR       "${PROJECT_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR       "${PROJECT_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_PATCH       "${PROJECT_VERSION_PATCH}")
+set(CPACK_PACKAGE_VENDOR              "${PACKAGE_AUTHOR}")
+set(CPACK_RESOURCE_FILE_LICENSE       "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_GENERATOR                   "STGZ;TGZ")
+#@formatter:on
+include(CPack)
