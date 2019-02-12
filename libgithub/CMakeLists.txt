@@ -15,7 +15,11 @@
 #
 set(LIBGITHUB_HEADER_FILES
     src/libgithub/c/libgithub.h
+    src/libgithub/c++/resources/contributor.h
+    src/libgithub/c++/resources/language.h
     src/libgithub/c++/resources/repository.h
+    src/libgithub/c++/resources/tag.h
+    src/libgithub/c++/resources/team.h
     src/libgithub/c++/resources/topic.h
     src/libgithub/gettext.h
     src/libgithub/gettext_defs.h
@@ -23,7 +27,11 @@ set(LIBGITHUB_HEADER_FILES
 
 set(LIBGITHUB_SOURCE_FILES
     src/libgithub/c/libgithub.cpp
+    src/libgithub/c++/resources/contributor.cpp
+    src/libgithub/c++/resources/language.cpp
     src/libgithub/c++/resources/repository.cpp
+    src/libgithub/c++/resources/tag.cpp
+    src/libgithub/c++/resources/team.cpp
     src/libgithub/c++/resources/topic.cpp)
 
 set(EXTRA_LIBS ${EXTRA_LIBS} ${CURL_LIBRARIES})
