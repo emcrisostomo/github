@@ -17,11 +17,12 @@
 #ifndef GITHUB_TOPIC_H
 #define GITHUB_TOPIC_H
 
-
-class topic
+namespace github
 {
+  class topic
+  {
 
+  };
 };
-
 
 #endif //GITHUB_TOPIC_H
