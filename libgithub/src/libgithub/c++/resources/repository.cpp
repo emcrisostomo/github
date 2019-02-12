@@ -46,6 +46,7 @@ std::vector<github::repository> github::repository::list()
 
   CURLcode res = curl_easy_perform(curl_handle);
 
+  // TODO: https://curl.haxx.se/libcurl/c/CURLOPT_ERRORBUFFER.html
   if(res == CURLE_OK) {
     long response_code;
     curl_easy_getinfo(curl_handle, CURLINFO_RESPONSE_CODE, &response_code);
