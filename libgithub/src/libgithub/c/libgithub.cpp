@@ -23,7 +23,7 @@
 
 size_t read_response_body(char *contents, size_t size, size_t nmemb, void *userp)
 {
-  ((std::string*)userp)->append((char*)contents, size * nmemb);
+  ((std::string *) userp)->append(contents, size * nmemb);
   return size * nmemb;
 }
 
@@ -33,10 +33,10 @@ void github_init_library()
 #ifdef ENABLE_NLS
   bindtextdomain(PACKAGE, LOCALEDIR);
 #endif
-  
+
   curl_global_init(CURL_GLOBAL_ALL);
 
-  CURL* curl_handle = curl_easy_init();
+  CURL *curl_handle = curl_easy_init();
   std::string body;
 
   curl_easy_setopt(curl_handle, CURLOPT_URL, "http://www.google.com/");
@@ -48,6 +48,4 @@ void github_init_library()
   curl_easy_cleanup(curl_handle);
 
   std::cout << body << std::endl;
-
-  return;
 }
