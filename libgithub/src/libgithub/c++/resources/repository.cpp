@@ -17,14 +17,43 @@
 #include "repository.h"
 #include <iostream>
 #include <string>
+#include <cstring>
+#include <map>
 #include <curl/curl.h>
 #include "rapidjson/document.h"
 #include "../exceptions/curl_exception.hpp"
 
-size_t read_response_body(char *contents, size_t size, size_t nmemb, void *userp)
+static size_t read_response_body(char *contents, size_t size, size_t nmemb, void *userp)
 {
   ((std::string *) userp)->append(contents, size * nmemb);
   return size * nmemb;
+}
+
+static size_t header_callback(char *buffer, size_t size, size_t nitems, void *userdata)
+{
+  size_t total = nitems * size;
+
+  if (userdata == nullptr) return total;
+
+  /* received header is nitems * size long in 'buffer' NOT ZERO TERMINATED */
+  /* 'userdata' is set with CURLOPT_HEADERDATA */
+  char res[total + 1];
+  strncpy(res, buffer, total);
+  res[total] = '\0';
+
+  std::string header(res);
+  std::string::size_type pos;
+  pos = header.find(": ");
+
+  if (pos == std::string::npos) return total;
+
+  std::string header_name = header.substr(0, pos);
+  std::string header_value = header.substr(pos + 2, header.length());
+
+  std::cout << "Header name: " << header_name << "\n";
+  std::cout << "Header value: " << header_value << "\n";
+
+  return total;
 }
 
 std::vector<github::repository> github::repository::list()
@@ -34,6 +63,7 @@ std::vector<github::repository> github::repository::list()
   CURL *curl_handle = curl_easy_init();
   char err_buffer[CURL_ERROR_SIZE]{};
   std::string body;
+  std::map<std::string, std::string> header_map;
 
   curl_easy_setopt(curl_handle, CURLOPT_ERRORBUFFER, err_buffer);
   curl_easy_setopt(curl_handle, CURLOPT_NETRC, CURL_NETRC_OPTIONAL);
@@ -42,6 +72,8 @@ std::vector<github::repository> github::repository::list()
   curl_easy_setopt(curl_handle, CURLOPT_VERBOSE, 0L);
   curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, read_response_body);
   curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, &body);
+  curl_easy_setopt(curl_handle, CURLOPT_HEADERFUNCTION, header_callback);
+  curl_easy_setopt(curl_handle, CURLOPT_HEADERDATA, &header_map);
 
   struct curl_slist *headers = nullptr;
   headers = curl_slist_append(headers, "Accept: application/vnd.github.v3+json");
