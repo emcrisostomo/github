@@ -17,6 +17,7 @@
 #ifndef GITHUB_REPOSITORY_H
 #define GITHUB_REPOSITORY_H
 
+#include <string>
 #include <vector>
 #include "contributor.h"
 #include "language.h"
