@@ -17,6 +17,7 @@
 #include "gettext.h"
 #include "github.hpp"
 #include "libgithub/c/libgithub.h"
+#include "libgithub/c++/exceptions/curl_exception.hpp"
 #include "libgithub/c++/resources/repository.h"
 #include <clocale>
 #include <string>
@@ -45,9 +46,17 @@ int main(int argc, char **argv)
   if (!parse_optsss(argc, argv))
     return EXIT_FAILURE;
 
-  github::repository::list();
+  try
+  {
+    github::repository::list();
+  }
+  catch(const github::curl_exception& curl_error)
+  {
+    std::cerr << curl_error.what() << "\n";
+    return EXIT_FAILURE;
+  }
 
-  return 0;
+  return EXIT_SUCCESS;
 }
 
 static bool parse_optsss(int argc, char **argv)
