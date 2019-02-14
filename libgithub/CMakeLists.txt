@@ -34,8 +34,6 @@ set(LIBGITHUB_SOURCE_FILES
     src/libgithub/c++/resources/team.cpp
     src/libgithub/c++/resources/topic.cpp)
 
-set(EXTRA_LIBS ${EXTRA_LIBS} ${CURL_LIBRARIES})
-
 add_library(libgithub ${LIBGITHUB_SOURCE_FILES} ${LIBGITHUB_HEADER_FILES})
 set_target_properties(libgithub PROPERTIES PREFIX "")
 
@@ -50,7 +48,7 @@ endif ()
 target_include_directories(libgithub PRIVATE ..)
 target_include_directories(libgithub PUBLIC src)
 target_include_directories(libgithub PRIVATE ${PROJECT_BINARY_DIR})
-target_link_libraries(libgithub PRIVATE ${EXTRA_LIBS})
+target_link_libraries(libgithub PRIVATE CURL::libcurl)
 
 install(TARGETS libgithub DESTINATION lib)
 install(FILES ${LIBGITHUB_HEADER_FILES} DESTINATION include/libgithub)
