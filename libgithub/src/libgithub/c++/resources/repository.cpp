@@ -18,6 +18,8 @@
 #include <iostream>
 #include <string>
 #include <curl/curl.h>
+#include "rapidjson/document.h"
+#include "../exceptions/curl_exception.hpp"
 
 size_t read_response_body(char *contents, size_t size, size_t nmemb, void *userp)
 {
@@ -30,8 +32,10 @@ std::vector<github::repository> github::repository::list()
   curl_global_init(CURL_GLOBAL_ALL);
 
   CURL *curl_handle = curl_easy_init();
+  char err_buffer[CURL_ERROR_SIZE]{};
   std::string body;
 
+  curl_easy_setopt(curl_handle, CURLOPT_ERRORBUFFER, err_buffer);
   curl_easy_setopt(curl_handle, CURLOPT_NETRC, CURL_NETRC_OPTIONAL);
   curl_easy_setopt(curl_handle, CURLOPT_CUSTOMREQUEST, "GET");
   curl_easy_setopt(curl_handle, CURLOPT_URL, "https://api.github.com/user/repos");
@@ -48,15 +52,30 @@ std::vector<github::repository> github::repository::list()
 
   CURLcode res = curl_easy_perform(curl_handle);
 
-  // TODO: https://curl.haxx.se/libcurl/c/CURLOPT_ERRORBUFFER.html
-  if(res == CURLE_OK) {
-    long response_code;
-    curl_easy_getinfo(curl_handle, CURLINFO_RESPONSE_CODE, &response_code);
-
-    std::cerr << "Response code: " << response_code << "\n";
+  if (!(res == CURLE_OK))
+  {
+    throw github::curl_exception(res, err_buffer);
   }
 
+  long response_code;
+  curl_easy_getinfo(curl_handle, CURLINFO_RESPONSE_CODE, &response_code);
+  std::cerr << "Response code: " << response_code << "\n";
+
   std::cout << body << "\n";
+
+  rapidjson::Document doc;
+  doc.Parse(body.c_str());
+
+  std::vector<github::repository> repositories;
+
+  for (rapidjson::SizeType i = 0; i < doc.Size(); ++i)
+  {
+    github::repository repo;
+    const rapidjson::Value& r = doc[i];
+    repo.id = r["id"].GetUint64();
+    repo.name = r["name"].GetString();
+    std::cerr << repo.id << ":" << repo.name << "\n";
+  }
 
   curl_easy_cleanup(curl_handle);
   curl_global_cleanup();
