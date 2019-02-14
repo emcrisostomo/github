@@ -15,6 +15,7 @@
 #
 set(LIBGITHUB_HEADER_FILES
     src/libgithub/c/libgithub.h
+    src/libgithub/c++/exceptions/curl_exception.hpp
     src/libgithub/c++/resources/contributor.h
     src/libgithub/c++/resources/language.h
     src/libgithub/c++/resources/repository.h
@@ -27,6 +28,7 @@ set(LIBGITHUB_HEADER_FILES
 
 set(LIBGITHUB_SOURCE_FILES
     src/libgithub/c/libgithub.cpp
+    src/libgithub/c++/exceptions/curl_exception.cpp
     src/libgithub/c++/resources/contributor.cpp
     src/libgithub/c++/resources/language.cpp
     src/libgithub/c++/resources/repository.cpp
