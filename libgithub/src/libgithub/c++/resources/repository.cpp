@@ -53,6 +53,9 @@ static size_t header_callback(char *buffer, size_t size, size_t nitems, void *us
   std::cout << "Header name: " << header_name << "\n";
   std::cout << "Header value: " << header_value << "\n";
 
+  auto *header_map = (std::map<std::string, std::string> *) userdata;
+  (*header_map)[header_name] = header_value;
+
   return total;
 }
 
