@@ -63,29 +63,29 @@ std::vector<github::repository> github::repository::list()
 {
   curl_global_init(CURL_GLOBAL_ALL);
 
-  CURL *curl_handle = curl_easy_init();
+  CURL *curl = curl_easy_init();
   char err_buffer[CURL_ERROR_SIZE]{};
   std::string body;
   std::map<std::string, std::string> header_map;
 
-  curl_easy_setopt(curl_handle, CURLOPT_ERRORBUFFER, err_buffer);
-  curl_easy_setopt(curl_handle, CURLOPT_NETRC, CURL_NETRC_OPTIONAL);
-  curl_easy_setopt(curl_handle, CURLOPT_CUSTOMREQUEST, "GET");
-  curl_easy_setopt(curl_handle, CURLOPT_URL, "https://api.github.com/user/repos");
-  curl_easy_setopt(curl_handle, CURLOPT_VERBOSE, 0L);
-  curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, read_response_body);
-  curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, &body);
-  curl_easy_setopt(curl_handle, CURLOPT_HEADERFUNCTION, header_callback);
-  curl_easy_setopt(curl_handle, CURLOPT_HEADERDATA, &header_map);
+  curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, err_buffer);
+  curl_easy_setopt(curl, CURLOPT_NETRC, CURL_NETRC_OPTIONAL);
+  curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+  curl_easy_setopt(curl, CURLOPT_URL, "https://api.github.com/user/repos");
+  curl_easy_setopt(curl, CURLOPT_VERBOSE, 0L);
+  curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, read_response_body);
+  curl_easy_setopt(curl, CURLOPT_WRITEDATA, &body);
+  curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, header_callback);
+  curl_easy_setopt(curl, CURLOPT_HEADERDATA, &header_map);
 
   struct curl_slist *headers = nullptr;
   headers = curl_slist_append(headers, "Accept: application/vnd.github.v3+json");
   headers = curl_slist_append(headers, "cache-control: no-cache");
   headers = curl_slist_append(headers, "User-Agent: github C/CPP library");
 //  headers = curl_slist_append(headers, "Content-Type: application/json");
-  curl_easy_setopt(curl_handle, CURLOPT_HTTPHEADER, headers);
+  curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
-  CURLcode res = curl_easy_perform(curl_handle);
+  CURLcode res = curl_easy_perform(curl);
 
   if (!(res == CURLE_OK))
   {
@@ -93,7 +93,7 @@ std::vector<github::repository> github::repository::list()
   }
 
   long response_code;
-  curl_easy_getinfo(curl_handle, CURLINFO_RESPONSE_CODE, &response_code);
+  curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
   std::cerr << "Response code: " << response_code << "\n";
 
   std::cout << body << "\n";
@@ -112,7 +112,7 @@ std::vector<github::repository> github::repository::list()
     std::cerr << repo.id << ":" << repo.name << "\n";
   }
 
-  curl_easy_cleanup(curl_handle);
+  curl_easy_cleanup(curl);
   curl_global_cleanup();
 
   return std::vector<github::repository>();
