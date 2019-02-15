@@ -15,6 +15,7 @@
  */
 
 #include "repository.h"
+#include <stdexcept>
 #include <iostream>
 #include <string>
 #include <cstring>
@@ -80,8 +81,7 @@ static std::string get_next_url(const std::vector<std::string>& links)
     }
     else
     {
-      // TODO: improve errors
-      throw std::exception();
+      throw std::runtime_error("Failed to parse link fragment");
     }
   }
 
@@ -195,7 +195,8 @@ std::vector<github::repository> github::repository::list()
         const rapidjson::Value& r = doc[i];
         repo.id = r["id"].GetUint64();
         repo.name = r["name"].GetString();
-        std::cerr << repo.id << ":" << repo.name << "\n";
+        repo.full_name = r["full_name"].GetString();
+        std::cerr << repo.full_name << "\n";
         repositories.push_back(std::move(repo));
       }
     }
