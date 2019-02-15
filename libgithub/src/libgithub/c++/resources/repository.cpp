@@ -22,6 +22,7 @@
 #include <curl/curl.h>
 #include "rapidjson/document.h"
 #include "../exceptions/curl_exception.hpp"
+#include "../exceptions/api_error.hpp"
 
 static size_t read_response_body(char *contents, size_t size, size_t nmemb, void *userp)
 {
@@ -68,15 +69,17 @@ std::vector<github::repository> github::repository::list()
   std::string body;
   std::map<std::string, std::string> header_map;
 
-  curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, err_buffer);
-  curl_easy_setopt(curl, CURLOPT_NETRC, CURL_NETRC_OPTIONAL);
-  curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
-  curl_easy_setopt(curl, CURLOPT_URL, "https://api.github.com/user/repos");
-  curl_easy_setopt(curl, CURLOPT_VERBOSE, 0L);
-  curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, read_response_body);
-  curl_easy_setopt(curl, CURLOPT_WRITEDATA, &body);
+  // @formatter:off
+  curl_easy_setopt(curl, CURLOPT_ERRORBUFFER,    err_buffer);
+  curl_easy_setopt(curl, CURLOPT_NETRC,          CURL_NETRC_OPTIONAL);
+  curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST,  "GET");
+  curl_easy_setopt(curl, CURLOPT_URL,            "https://api.github.com/user/repos");
+  curl_easy_setopt(curl, CURLOPT_VERBOSE,        0L);
+  curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION,  read_response_body);
+  curl_easy_setopt(curl, CURLOPT_WRITEDATA,      &body);
   curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, header_callback);
-  curl_easy_setopt(curl, CURLOPT_HEADERDATA, &header_map);
+  curl_easy_setopt(curl, CURLOPT_HEADERDATA,     &header_map);
+  // @formatter:on
 
   struct curl_slist *headers = nullptr;
   headers = curl_slist_append(headers, "Accept: application/vnd.github.v3+json");
@@ -87,16 +90,21 @@ std::vector<github::repository> github::repository::list()
 
   CURLcode res = curl_easy_perform(curl);
 
+  // TODO: encapsulate check
   if (!(res == CURLE_OK))
   {
     throw github::curl_exception(res, err_buffer);
   }
 
-  long response_code;
+  unsigned long response_code;
   curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
   std::cerr << "Response code: " << response_code << "\n";
 
-  std::cout << body << "\n";
+  // TODO: encapsulate check
+  if (response_code != 200)
+  {
+    throw api_error(response_code);
+  }
 
   rapidjson::Document doc;
   doc.Parse(body.c_str());
