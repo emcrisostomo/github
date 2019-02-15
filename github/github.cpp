@@ -22,6 +22,7 @@
 #include "libgithub/c++/resources/repository.h"
 #include <clocale>
 #include <string>
+#include <stdexcept>
 #include <getopt.h>
 #include <iostream>
 #include <cstdlib>
@@ -50,23 +51,28 @@ int main(int argc, char **argv)
   try
   {
     github::repository::list();
+
+    return EXIT_SUCCESS;
   }
-  catch(const github::curl_exception& curl_error)
+  catch (const github::curl_exception& curl_error)
   {
     std::cerr << curl_error.what() << "\n";
-    return EXIT_FAILURE;
   }
-  catch(const github::api_error& api_error)
+  catch (const github::api_error& api_error)
   {
     std::cerr << "Unexpected status code: " << api_error.get_status_code() << "\n";
 
     std::string err(api_error.what());
     if (err.length()) std::cerr << "Error message: " << err << "\n";
-
-    return EXIT_FAILURE;
   }
-
-  return EXIT_SUCCESS;
+  catch (const std::runtime_error& runtime_error)
+  {
+    std::cerr << runtime_error.what() << "\n";
+  }
+  catch (...)
+  {
+    std::cerr << "An unknown error has occurred.\n";
+  }
 }
 
 static bool parse_optsss(int argc, char **argv)
