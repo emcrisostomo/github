@@ -106,18 +106,32 @@ std::vector<github::repository> github::repository::list()
     throw api_error(response_code);
   }
 
-  rapidjson::Document doc;
-  doc.Parse(body.c_str());
+  // Load all documents
+  std::vector<rapidjson::Document> documents;
+  {
+    rapidjson::Document doc;
+    doc.Parse(body.c_str());
+    documents.push_back(std::move(doc));
+  }
 
+  if (header_map.find("Link") != header_map.end())
+  {
+    std::cout << "XXX:" << header_map["Link"] << "\n";
+  }
+
+  // Parse repository information
   std::vector<github::repository> repositories;
 
-  for (rapidjson::SizeType i = 0; i < doc.Size(); ++i)
+  for (const auto& doc : documents)
   {
-    github::repository repo;
-    const rapidjson::Value& r = doc[i];
-    repo.id = r["id"].GetUint64();
-    repo.name = r["name"].GetString();
-    std::cerr << repo.id << ":" << repo.name << "\n";
+    for (rapidjson::SizeType i = 0; i < doc.Size(); ++i)
+    {
+      github::repository repo;
+      const rapidjson::Value &r = doc[i];
+      repo.id = r["id"].GetUint64();
+      repo.name = r["name"].GetString();
+      std::cerr << repo.id << ":" << repo.name << "\n";
+    }
   }
 
   curl_easy_cleanup(curl);
