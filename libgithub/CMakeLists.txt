@@ -23,6 +23,7 @@ set(LIBGITHUB_HEADER_FILES
     src/libgithub/c++/resources/tag.h
     src/libgithub/c++/resources/team.h
     src/libgithub/c++/resources/topic.h
+    src/libgithub/c++/rest/rest_client.h
     src/libgithub/gettext.h
     src/libgithub/gettext_defs.h
     ${PROJECT_BINARY_DIR}/config.h)
@@ -36,7 +37,8 @@ set(LIBGITHUB_SOURCE_FILES
     src/libgithub/c++/resources/repository.cpp
     src/libgithub/c++/resources/tag.cpp
     src/libgithub/c++/resources/team.cpp
-    src/libgithub/c++/resources/topic.cpp)
+    src/libgithub/c++/resources/topic.cpp
+    src/libgithub/c++/rest/rest_client.cpp)
 
 add_library(libgithub ${LIBGITHUB_SOURCE_FILES} ${LIBGITHUB_HEADER_FILES})
 set_target_properties(libgithub PROPERTIES PREFIX "")
