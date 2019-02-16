@@ -211,4 +211,20 @@ namespace github
   {
     return this->paginated_bodies;
   }
+
+  std::vector<rapidjson::Document> rest_client::get_paginated_bodies_as_json() const
+  {
+    std::vector<rapidjson::Document> documents;
+    for (const auto& body : this->paginated_bodies)
+    {
+      // Load all documents
+      {
+        rapidjson::Document doc;
+        doc.Parse(body.c_str());
+        documents.push_back(std::move(doc));
+      }
+    }
+
+    return documents;
+  }
 };

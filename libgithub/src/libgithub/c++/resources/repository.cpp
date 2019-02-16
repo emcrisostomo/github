@@ -31,18 +31,7 @@ std::vector<github::repository> github::repository::list()
 {
   github::rest_client rest;
   rest.get("https://api.github.com/user/repos", true);
-  const auto bodies = rest.get_paginated_bodies();
-
-  std::vector<rapidjson::Document> documents;
-  for (const auto& body : bodies)
-  {
-    // Load all documents
-    {
-      rapidjson::Document doc;
-      doc.Parse(body.c_str());
-      documents.push_back(std::move(doc));
-    }
-  }
+  std::vector<rapidjson::Document> documents = rest.get_paginated_bodies_as_json();
 
   std::vector<github::repository> repositories;
   for (const auto& doc : documents)

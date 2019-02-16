@@ -23,6 +23,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "rapidjson/document.h"
 
 namespace github
 {
@@ -36,6 +37,7 @@ namespace github
 
     void get(const std::string& url, bool paginated = false);
     std::vector<std::string> get_paginated_bodies() const;
+    std::vector<rapidjson::Document> get_paginated_bodies_as_json() const;
 
   private:
     void set_common_opts();
