@@ -198,7 +198,7 @@ namespace github
       paginated_bodies.push_back(std::move(body));
 
       next_page_url = {};
-      if (header_map.find("Link") != header_map.end())
+      if (paginated && header_map.find("Link") != header_map.end())
       {
         std::string link_header = header_map["Link"];
         std::vector<std::string> links = get_links(link_header);
