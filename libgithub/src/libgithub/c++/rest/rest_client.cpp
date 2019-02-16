@@ -125,6 +125,8 @@ namespace github
   {
     curl_global_init(CURL_GLOBAL_ALL);
     curl = std::unique_ptr<CURL, std::function<void(CURL *)>>(curl_easy_init(), curl_deleter);
+
+    set_common_opts();
   }
 
   rest_client::~rest_client()
@@ -132,28 +134,41 @@ namespace github
     curl_global_cleanup();
   }
 
+  void rest_client::cleanup_pre_call()
+  {
+    err_buffer[0] = '\0';
+    body = "";
+    header_map.clear();
+  }
+
+  void rest_client::set_common_opts()
+  {
+    // @formatter:off
+    curl_easy_setopt(curl.get(), CURLOPT_NETRC,          CURL_NETRC_OPTIONAL);
+    curl_easy_setopt(curl.get(), CURLOPT_ERRORBUFFER,    err_buffer);
+    curl_easy_setopt(curl.get(), CURLOPT_VERBOSE,        0L);
+    curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION,  read_response_body);
+    curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA,      &body);
+    curl_easy_setopt(curl.get(), CURLOPT_HEADERFUNCTION, header_callback);
+    curl_easy_setopt(curl.get(), CURLOPT_HEADERDATA,     &header_map);
+    // @formatter:on
+  }
+
+  CURLcode rest_client::perform_call()
+  {
+    cleanup_pre_call();
+    return curl_easy_perform(curl.get());
+  }
+
   void rest_client::get(const std::string& url, bool paginated)
   {
-    char err_buffer[CURL_ERROR_SIZE]{};
-    std::string body;
-    std::map<std::string, std::string> header_map;
-
     std::string next_page_url = url;
 
     while (!next_page_url.empty())
     {
-      body = "";
-
       // @formatter:off
-      curl_easy_setopt(curl.get(), CURLOPT_ERRORBUFFER,    err_buffer);
-      curl_easy_setopt(curl.get(), CURLOPT_NETRC,          CURL_NETRC_OPTIONAL);
       curl_easy_setopt(curl.get(), CURLOPT_CUSTOMREQUEST,  "GET");
       curl_easy_setopt(curl.get(), CURLOPT_URL,            next_page_url.c_str());
-      curl_easy_setopt(curl.get(), CURLOPT_VERBOSE,        0L);
-      curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION,  read_response_body);
-      curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA,      &body);
-      curl_easy_setopt(curl.get(), CURLOPT_HEADERFUNCTION, header_callback);
-      curl_easy_setopt(curl.get(), CURLOPT_HEADERDATA,     &header_map);
       // @formatter:on
 
       struct curl_slist *headers = nullptr;
@@ -162,7 +177,7 @@ namespace github
       headers = curl_slist_append(headers, "User-Agent: github C/CPP library");
       curl_easy_setopt(curl.get(), CURLOPT_HTTPHEADER, headers);
 
-      CURLcode res = curl_easy_perform(curl.get());
+      CURLcode res = perform_call();
 
       // TODO: encapsulate check
       if (!(res == CURLE_OK))

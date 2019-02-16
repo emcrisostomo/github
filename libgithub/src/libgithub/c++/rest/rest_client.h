@@ -22,6 +22,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <map>
 
 namespace github
 {
@@ -37,8 +38,16 @@ namespace github
     std::vector<std::string> get_paginated_bodies() const;
 
   private:
+    void set_common_opts();
+    void cleanup_pre_call();
+    CURLcode perform_call();
+
+  private:
     std::unique_ptr<CURL, std::function<void(CURL *)>> curl;
+    std::string body;
+    std::map<std::string, std::string> header_map;
     std::vector<std::string> paginated_bodies;
+    char err_buffer[CURL_ERROR_SIZE]{};
   };
 };
 
