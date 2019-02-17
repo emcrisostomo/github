@@ -27,8 +27,6 @@
 
 namespace github
 {
-  void curl_deleter(CURL *curl);
-
   class rest_client
   {
   public:

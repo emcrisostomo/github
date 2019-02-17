@@ -22,7 +22,7 @@
 
 namespace github
 {
-  void curl_deleter(CURL *curl)
+  static void curl_deleter(CURL *curl)
   {
     curl_easy_cleanup(curl);
   }
