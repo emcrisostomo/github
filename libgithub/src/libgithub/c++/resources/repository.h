@@ -27,6 +27,7 @@
 
 namespace github
 {
+  // TODO: add missing attributes
   class repository
   {
   public:
