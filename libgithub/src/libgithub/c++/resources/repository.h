@@ -52,6 +52,7 @@ namespace github
     // TODO: model the owner entity
     // github::owner
     bool private_repo;
+    std::string html_url;
     std::string description;
     bool fork;
     std::string url;
