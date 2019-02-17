@@ -44,26 +44,7 @@ std::vector<github::repository> github::repository::list()
       repo.node_id = r["node_id"].GetString();
       repo.name = r["name"].GetString();
       repo.full_name = r["full_name"].GetString();
-// "owner": {
-//      "login": "octocat",
-//      "id": 1,
-//      "node_id": "MDQ6VXNlcjE=",
-//      "avatar_url": "https://github.com/images/error/octocat_happy.gif",
-//      "gravatar_id": "",
-//      "url": "https://api.github.com/users/octocat",
-//      "html_url": "https://github.com/octocat",
-//      "followers_url": "https://api.github.com/users/octocat/followers",
-//      "following_url": "https://api.github.com/users/octocat/following{/other_user}",
-//      "gists_url": "https://api.github.com/users/octocat/gists{/gist_id}",
-//      "starred_url": "https://api.github.com/users/octocat/starred{/owner}{/repo}",
-//      "subscriptions_url": "https://api.github.com/users/octocat/subscriptions",
-//      "organizations_url": "https://api.github.com/users/octocat/orgs",
-//      "repos_url": "https://api.github.com/users/octocat/repos",
-//      "events_url": "https://api.github.com/users/octocat/events{/privacy}",
-//      "received_events_url": "https://api.github.com/users/octocat/received_events",
-//      "type": "User",
-//      "site_admin": false
-//    },
+//      repo.owner = r["owner"].GetString();
       repo.private_repo = r["private"].GetBool();
       repo.html_url = r["html_url"].GetString();
       repo.description = r["description"].GetString();
@@ -111,44 +92,28 @@ std::vector<github::repository> github::repository::list()
       repo.hooks_url = r["hooks_url"].GetString();
       repo.svn_url = r["svn_url"].GetString();
       repo.homepage = r["homepage"].GetString();
+      repo.repo_language = r["language"].GetString();
+      repo.forks_count = r["forks_count"].GetUint64();
+      repo.stargazers_count = r["stargazers_count"].GetUint64();
+      repo.watchers_count = r["watchers_count"].GetUint64();
+      repo.size = r["size"].GetUint64();
+      repo.default_branch = r["default_branch"].GetString();
+      repo.open_issues_count = r["open_issues_count"].GetUint64();
+//       repo.topics = r["topics"].GetString();
+      repo.has_issues = r["has_issues"].GetBool();
+      repo.has_projects = r["has_projects"].GetBool();
+      repo.has_wiki = r["has_wiki"].GetBool();
+      repo.has_pages = r["has_pages"].GetBool();
+      repo.has_downloads = r["has_downloads"].GetBool();
+      repo.archived = r["archived"].GetBool();
+      repo.pushed_at = r["pushed_at"].GetString();
+      repo.created_at = r["created_at"].GetString();
+      repo.updated_at = r["updated_at"].GetString();
+//      repo.permissions = r["permissions"].GetString();
+      repo.subscribers_count = r["subscribers_count"].GetUint64();
+      repo.network_count = r["network_count"].GetUint64();
+//      repo.license = r["license"].GetString();
 
-//    "language": null,
-//    "forks_count": 9,
-//    "stargazers_count": 80,
-//    "watchers_count": 80,
-//    "size": 108,
-//    "default_branch": "master",
-//    "open_issues_count": 0,
-//    "topics": [
-//      "octocat",
-//      "atom",
-//      "electron",
-//      "API"
-//    ],
-//    "has_issues": true,
-//    "has_projects": true,
-//    "has_wiki": true,
-//    "has_pages": false,
-//    "has_downloads": true,
-//    "archived": false,
-//    "pushed_at": "2011-01-26T19:06:43Z",
-//    "created_at": "2011-01-26T19:01:12Z",
-//    "updated_at": "2011-01-26T19:14:43Z",
-//    "permissions": {
-//      "admin": false,
-//      "push": false,
-//      "pull": true
-//    },
-//    "subscribers_count": 42,
-//    "network_count": 0,
-//    "license": {
-//      "key": "mit",
-//      "name": "MIT License",
-//      "spdx_id": "MIT",
-//      "url": "https://api.github.com/licenses/mit",
-//      "node_id": "MDc6TGljZW5zZW1pdA=="
-//    }
-      std::cerr << repo.full_name << "\n";
       repositories.push_back(std::move(repo));
     }
   }
