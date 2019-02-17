@@ -21,6 +21,7 @@
 #include <vector>
 #include "contributor.h"
 #include "language.h"
+#include "user.h"
 #include "tag.h"
 #include "team.h"
 #include "topic.h"
@@ -50,8 +51,7 @@ namespace github
     std::string node_id;
     std::string name;
     std::string full_name;
-    // TODO: model the owner entity
-    // github::owner
+    github::user owner;
     bool private_repo;
     std::string html_url;
     std::string description;

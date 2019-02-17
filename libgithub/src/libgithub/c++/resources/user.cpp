@@ -15,3 +15,50 @@
  */
 
 #include "user.h"
+#include "rapidjson/document.h"
+
+
+github::user github::user::parse(const rapidjson::Value& json_value)
+{
+  // TODO: fix parsing code
+  github::user u;
+  u.login = json_value[""].GetString();
+  u.id = json_value[""].GetUint64();
+  u.node_id = json_value[""].GetString();
+  u.avatar_url = json_value[""].GetString();
+  u.gravatar_id = json_value[""].GetString();
+  u.url = json_value[""].GetString();
+  u.html_url = json_value[""].GetString();
+  u.followers_url = json_value[""].GetString();
+  u.following_url = json_value[""].GetString();
+  u.gists_url = json_value[""].GetString();
+  u.starred_url = json_value[""].GetString();
+  u.subscriptions_url = json_value[""].GetString();
+  u.organizations_url = json_value[""].GetString();
+  u.repos_url = json_value[""].GetString();
+  u.events_url = json_value[""].GetString();
+  u.received_events_url = json_value[""].GetString();
+  u.type = json_value[""].GetString();
+  u.site_admin = json_value[""].GetBool();
+  u.name = json_value[""].GetString();
+  u.company = json_value[""].GetString();
+  u.blog = json_value[""].GetString();
+  u.location = json_value[""].GetString();
+  u.email = json_value[""].GetString();
+  u.hireable = json_value[""].GetBool();
+  u.bio = json_value[""].GetString();
+  u.public_repos = json_value[""].GetUint64();
+  u.public_gists = json_value[""].GetUint64();
+  u.followers = json_value[""].GetUint64();
+  u.following = json_value[""].GetUint64();
+  u.created_at = json_value[""].GetString();
+  u.updated_at = json_value[""].GetString();
+  u.private_gists = json_value[""].GetUint64();
+  u.total_private_repos = json_value[""].GetUint64();
+  u.owned_private_repos = json_value[""].GetUint64();
+  u.disk_usage = json_value[""].GetUint64();
+  u.collaborators = json_value[""].GetUint64();
+  u.two_factor_authentication = json_value[""].GetBool();
+
+  return u;
+}

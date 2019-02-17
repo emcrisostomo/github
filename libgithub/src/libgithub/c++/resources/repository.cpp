@@ -34,17 +34,19 @@ std::vector<github::repository> github::repository::list()
   std::vector<rapidjson::Document> documents = rest.get_paginated_bodies_as_json();
 
   std::vector<github::repository> repositories;
+
   for (const auto& doc : documents)
   {
     for (rapidjson::SizeType i = 0; i < doc.Size(); ++i)
     {
       github::repository repo;
       const rapidjson::Value& r = doc[i];
+
       repo.id = r["id"].GetUint64();
       repo.node_id = r["node_id"].GetString();
       repo.name = r["name"].GetString();
       repo.full_name = r["full_name"].GetString();
-//      repo.owner = r["owner"].GetString();
+      repo.owner = user::parse(r["owner"]);
       repo.private_repo = r["private"].GetBool();
       repo.html_url = r["html_url"].GetString();
       repo.description = r["description"].GetString();

@@ -18,6 +18,7 @@
 #define GITHUB_USER_H
 
 #include <string>
+#include "rapidjson/document.h"
 
 namespace github
 {
@@ -63,6 +64,8 @@ namespace github
     uint64_t collaborators;
     bool two_factor_authentication;
 //    std::string plan;
+
+    static user parse(const rapidjson::Value& json_value);
   };
 };
 
