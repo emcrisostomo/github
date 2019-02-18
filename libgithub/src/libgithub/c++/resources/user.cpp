@@ -40,7 +40,9 @@ github::user github::user::parse(const rapidjson::Value& json_value)
   u.received_events_url = json_value["received_events_url"].GetString();
   u.type = json_value["type"].GetString();
   u.site_admin = json_value["site_admin"].GetBool();
-  u.name = json_value["name"].GetString();
+  const rapidjson::Value::ConstMemberIterator& name_value = json_value.FindMember("name");
+  if (name_value != json_value.MemberEnd())
+    u.name = name_value->value.GetString();
   u.company = json_value["company"].GetString();
   u.blog = json_value["blog"].GetString();
   u.location = json_value["location"].GetString();
