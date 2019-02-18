@@ -20,7 +20,6 @@
 
 github::user github::user::parse(const rapidjson::Value& json_value)
 {
-  // TODO: fix parsing code
   github::user u;
   u.login = json_value["login"].GetString();
   u.id = json_value["id"].GetUint64();
@@ -40,27 +39,45 @@ github::user github::user::parse(const rapidjson::Value& json_value)
   u.received_events_url = json_value["received_events_url"].GetString();
   u.type = json_value["type"].GetString();
   u.site_admin = json_value["site_admin"].GetBool();
-  const rapidjson::Value::ConstMemberIterator& name_value = json_value.FindMember("name");
+
+  // Public information is not always returned by the API: if the owner is a
+  // sub-document, it's omitted.  We're using the name attribute as a guard to
+  // check whether we should look for the rest.
+  const rapidjson::Value::ConstMemberIterator& name_value =
+    json_value.FindMember("name");
+
   if (name_value != json_value.MemberEnd())
+  {
     u.name = name_value->value.GetString();
-  u.company = json_value["company"].GetString();
-  u.blog = json_value["blog"].GetString();
-  u.location = json_value["location"].GetString();
-  u.email = json_value["email"].GetString();
-  u.hireable = json_value["hireable"].GetBool();
-  u.bio = json_value["bio"].GetString();
-  u.public_repos = json_value["public_repos"].GetUint64();
-  u.public_gists = json_value["public_gists"].GetUint64();
-  u.followers = json_value["followers"].GetUint64();
-  u.following = json_value["following"].GetUint64();
-  u.created_at = json_value["created_at"].GetString();
-  u.updated_at = json_value["updated_at"].GetString();
-  u.private_gists = json_value["private_gists"].GetUint64();
-  u.total_private_repos = json_value["total_private_repos"].GetUint64();
-  u.owned_private_repos = json_value["owned_private_repos"].GetUint64();
-  u.disk_usage = json_value["disk_usage"].GetUint64();
-  u.collaborators = json_value["collaborators"].GetUint64();
-  u.two_factor_authentication = json_value["two_factor_authentication"].GetBool();
+    u.company = json_value["company"].GetString();
+    u.blog = json_value["blog"].GetString();
+    u.location = json_value["location"].GetString();
+    u.email = json_value["email"].GetString();
+    u.hireable = json_value["hireable"].GetBool();
+    u.bio = json_value["bio"].GetString();
+    u.public_repos = json_value["public_repos"].GetUint64();
+    u.public_gists = json_value["public_gists"].GetUint64();
+    u.followers = json_value["followers"].GetUint64();
+    u.following = json_value["following"].GetUint64();
+    u.created_at = json_value["created_at"].GetString();
+    u.updated_at = json_value["updated_at"].GetString();
+  }
+
+  // Private information is only returned when the user is authenticated with
+  // the user scope.  We're using the private_gists attribute as a guard to
+  // check whether we should look for the rest.
+  const rapidjson::Value::ConstMemberIterator& private_gists_value =
+    json_value.FindMember("private_gists");
+
+  if (private_gists_value != json_value.MemberEnd())
+  {
+    u.private_gists = json_value["private_gists"].GetUint64();
+    u.total_private_repos = json_value["total_private_repos"].GetUint64();
+    u.owned_private_repos = json_value["owned_private_repos"].GetUint64();
+    u.disk_usage = json_value["disk_usage"].GetUint64();
+    u.collaborators = json_value["collaborators"].GetUint64();
+    u.two_factor_authentication = json_value["two_factor_authentication"].GetBool();
+  }
 
   return u;
 }
