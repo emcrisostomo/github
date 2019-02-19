@@ -13,6 +13,9 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+include(FindBoost)
+find_package(Boost 1.30.0 REQUIRED)
+
 set(LIBGITHUB_HEADER_FILES
     src/libgithub/c/libgithub.h
     src/libgithub/c++/exceptions/api_error.hpp
@@ -56,6 +59,7 @@ endif ()
 target_include_directories(libgithub PRIVATE ..)
 target_include_directories(libgithub PUBLIC src)
 target_include_directories(libgithub PRIVATE ${PROJECT_BINARY_DIR})
+target_include_directories(libgithub PUBLIC Boost::boost)
 target_link_libraries(libgithub PRIVATE CURL::libcurl)
 
 install(TARGETS libgithub DESTINATION lib)
