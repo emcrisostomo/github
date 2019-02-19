@@ -15,16 +15,8 @@
  */
 
 #include "user.h"
+#include "libgithub/src/libgithub/c++/json/json.hpp"
 #include "rapidjson/document.h"
-
-template<typename T>
-boost::optional<T> json_optional_value(const rapidjson::Value& json, const char * name)
-{
-  const auto itr = json.FindMember(name);
-  if (itr == json.MemberEnd()) return boost::optional<T>();
-
-  return boost::optional<T>(json[name].Get<T>());
-}
 
 github::user github::user::parse(const rapidjson::Value& json_value)
 {
@@ -47,25 +39,25 @@ github::user github::user::parse(const rapidjson::Value& json_value)
   u.received_events_url = json_value["received_events_url"].GetString();
   u.type = json_value["type"].GetString();
   u.site_admin = json_value["site_admin"].GetBool();
-  u.name = json_value["name"].GetString();
-  u.company = json_value["company"].GetString();
-  u.blog = json_value["blog"].GetString();
-  u.location = json_value["location"].GetString();
-  u.email = json_value["email"].GetString();
-  u.hireable = json_value["hireable"].GetBool();
-  u.bio = json_value["bio"].GetString();
-  u.public_repos = json_value["public_repos"].GetUint64();
-  u.public_gists = json_value["public_gists"].GetUint64();
-  u.followers = json_value["followers"].GetUint64();
-  u.following = json_value["following"].GetUint64();
-  u.created_at = json_value["created_at"].GetString();
-  u.updated_at = json_value["updated_at"].GetString();
-  u.private_gists = json_value["private_gists"].GetUint64();
-  u.total_private_repos = json_value["total_private_repos"].GetUint64();
-  u.owned_private_repos = json_value["owned_private_repos"].GetUint64();
-  u.disk_usage = json_value["disk_usage"].GetUint64();
-  u.collaborators = json_value["collaborators"].GetUint64();
-  u.two_factor_authentication = json_value["two_factor_authentication"].GetBool();
+  u.name = json::json_optional_value<std::string>(json_value, "name");
+  u.company = json::json_optional_value<std::string>(json_value, "company");
+  u.blog = json::json_optional_value<std::string>(json_value, "blog");
+  u.location = json::json_optional_value<std::string>(json_value, "location");
+  u.email = json::json_optional_value<std::string>(json_value, "email");
+  u.hireable = json::json_optional_value<bool>(json_value, "hireable");
+  u.bio = json::json_optional_value<std::string>(json_value, "bio");
+  u.public_repos = json::json_optional_value<uint64_t >(json_value, "public_repos");
+  u.public_gists = json::json_optional_value<uint64_t>(json_value, "public_gists");
+  u.followers = json::json_optional_value<uint64_t>(json_value, "followers");
+  u.following = json::json_optional_value<uint64_t>(json_value, "following");
+  u.created_at = json::json_optional_value<std::string>(json_value, "created_at");
+  u.updated_at = json::json_optional_value<std::string>(json_value, "updated_at");
+  u.private_gists = json::json_optional_value<uint64_t>(json_value, "private_gists");
+  u.total_private_repos = json::json_optional_value<uint64_t>(json_value, "total_private_repos");
+  u.owned_private_repos = json::json_optional_value<uint64_t>(json_value, "owned_private_repos");
+  u.disk_usage = json::json_optional_value<uint64_t>(json_value, "disk_usage");
+  u.collaborators = json::json_optional_value<uint64_t>(json_value, "collaborators");
+  u.two_factor_authentication = json::json_optional_value<bool>(json_value, "two_factor_authentication");
 
   return u;
 }
