@@ -17,6 +17,14 @@
 #include "user.h"
 #include "rapidjson/document.h"
 
+template<typename T>
+boost::optional<T> json_optional_value(const rapidjson::Value& json, const char * name)
+{
+  const auto itr = json.FindMember(name);
+  if (itr == json.MemberEnd()) return boost::optional<T>();
+
+  return boost::optional<T>(json[name].Get<T>());
+}
 
 github::user github::user::parse(const rapidjson::Value& json_value)
 {
