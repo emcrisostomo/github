@@ -19,6 +19,7 @@
 
 #include <string>
 #include "rapidjson/document.h"
+#include <boost/optional.hpp>
 
 namespace github
 {
@@ -44,26 +45,26 @@ namespace github
     std::string received_events_url;
     std::string type;
     bool site_admin;
-    std::string name;
-    std::string company;
-    std::string blog;
-    std::string location;
-    std::string email;
-    bool hireable;
-    std::string bio;
-    uint64_t public_repos;
-    uint64_t public_gists;
-    uint64_t followers;
-    uint64_t following;
-    std::string created_at;
-    std::string updated_at;
-    uint64_t private_gists;
-    uint64_t total_private_repos;
-    uint64_t owned_private_repos;
-    uint64_t disk_usage;
-    uint64_t collaborators;
-    bool two_factor_authentication;
-//    std::string plan;
+    boost::optional<std::string> name;
+    boost::optional<std::string> company;
+    boost::optional<std::string> blog;
+    boost::optional<std::string> location;
+    boost::optional<std::string> email;
+    boost::optional<bool> hireable;
+    boost::optional<std::string> bio;
+    boost::optional<uint64_t> public_repos;
+    boost::optional<uint64_t> public_gists;
+    boost::optional<uint64_t> followers;
+    boost::optional<uint64_t> following;
+    boost::optional<std::string> created_at;
+    boost::optional<std::string> updated_at;
+    boost::optional<uint64_t> private_gists;
+    boost::optional<uint64_t> total_private_repos;
+    boost::optional<uint64_t> owned_private_repos;
+    boost::optional<uint64_t> disk_usage;
+    boost::optional<uint64_t> collaborators;
+    boost::optional<bool> two_factor_authentication;
+//    boost::optional<std::string> plan;
 
     static user parse(const rapidjson::Value& json_value);
   };
