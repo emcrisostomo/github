@@ -20,6 +20,7 @@ set(LIBGITHUB_HEADER_FILES
     src/libgithub/c/libgithub.h
     src/libgithub/c++/exceptions/api_error.hpp
     src/libgithub/c++/exceptions/curl_exception.hpp
+    src/libgithub/c++/json/json.h
     src/libgithub/c++/resources/contributor.h
     src/libgithub/c++/resources/language.h
     src/libgithub/c++/resources/repository.h
