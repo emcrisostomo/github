@@ -17,31 +17,37 @@
 #ifndef GITHUB_JSON_H
 #define GITHUB_JSON_H
 
-template<typename T>
-bool json_has_field(const rapidjson::Value& json, const char *name)
+namespace github
 {
-  const auto itr = json.FindMember(name);
-  return !(itr == json.MemberEnd());
-}
+  namespace json
+  {
+    template<typename T>
+    bool json_has_field(const rapidjson::Value& json, const char *name)
+    {
+      const auto itr = json.FindMember(name);
+      return !(itr == json.MemberEnd());
+    }
 
-template<typename T>
-boost::optional<T>
-json_optional_value(const rapidjson::Value& json,
-                    const char *name)
-{
-  if (!json_has_field<T>(json, name)) return boost::optional<T>();
+    template<typename T>
+    boost::optional<T>
+    json_optional_value(const rapidjson::Value& json,
+                        const char *name)
+    {
+      if (!json_has_field<T>(json, name)) return boost::optional<T>();
 
-  return boost::optional<T>(json[name].Get<T>());
-}
+      return boost::optional<T>(json[name].Get<T>());
+    }
 
-template<>
-boost::optional<std::string>
-json_optional_value(const rapidjson::Value& json,
-                    const char *name)
-{
-  if (!json_has_field<std::string>(json, name)) return boost::optional<std::string>();
+    template<>
+    boost::optional<std::string>
+    json_optional_value(const rapidjson::Value& json,
+                        const char *name)
+    {
+      if (!json_has_field<std::string>(json, name)) return boost::optional<std::string>();
 
-  return boost::optional<std::string>(json[name].GetString());
+      return boost::optional<std::string>(json[name].GetString());
+    }
+  }
 }
 
 #endif //GITHUB_JSON_H
