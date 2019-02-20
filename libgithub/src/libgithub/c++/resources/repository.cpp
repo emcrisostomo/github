@@ -50,7 +50,7 @@ std::vector<github::repository> github::repository::list()
       repo.owner = user::parse(r["owner"]);
       repo.private_repo = r["private"].GetBool();
       repo.html_url = r["html_url"].GetString();
-      repo.description = r["description"].GetString();
+      repo.description = json::json_optional_value<std::string>(r, "description");
       repo.fork = r["fork"].GetBool();
       repo.url = r["url"].GetString();
       repo.archive_url = r["archive_url"].GetString();
@@ -94,8 +94,8 @@ std::vector<github::repository> github::repository::list()
       repo.mirror_url = json::json_optional_value<std::string>(r, "mirror_url");
       repo.hooks_url = r["hooks_url"].GetString();
       repo.svn_url = r["svn_url"].GetString();
-      repo.homepage = r["homepage"].GetString();
-      repo.repo_language = r["language"].GetString();
+      repo.homepage = json::json_optional_value<std::string>(r, "homepage");
+      repo.repo_language = json::json_optional_value<std::string>(r, "language");
       repo.forks_count = r["forks_count"].GetUint64();
       repo.stargazers_count = r["stargazers_count"].GetUint64();
       repo.watchers_count = r["watchers_count"].GetUint64();
@@ -113,13 +113,13 @@ std::vector<github::repository> github::repository::list()
       repo.created_at = r["created_at"].GetString();
       repo.updated_at = r["updated_at"].GetString();
 //      repo.permissions = r["permissions"].GetString();
-      repo.subscribers_count = r["subscribers_count"].GetUint64();
-      repo.network_count = r["network_count"].GetUint64();
+      repo.subscribers_count = json::json_optional_value<uint64_t>(r, "subscribers_count");
+      repo.network_count = json::json_optional_value<uint64_t>(r, "network_count");
 //      repo.license = r["license"].GetString();
 
       repositories.push_back(std::move(repo));
     }
   }
 
-  return std::vector<github::repository>();
+  return repositories;
 }

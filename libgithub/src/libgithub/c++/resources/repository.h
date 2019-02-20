@@ -55,7 +55,7 @@ namespace github
     github::user owner;
     bool private_repo;
     std::string html_url;
-    std::string description;
+    boost::optional<std::string> description;
     bool fork;
     std::string url;
     std::string archive_url;
@@ -99,8 +99,8 @@ namespace github
     boost::optional<std::string> mirror_url;
     std::string hooks_url;
     std::string svn_url;
-    std::string homepage;
-    std::string repo_language;
+    boost::optional<std::string> homepage;
+    boost::optional<std::string> repo_language;
     uint64_t forks_count;
     uint64_t stargazers_count;
     uint64_t watchers_count;
@@ -120,8 +120,8 @@ namespace github
     std::string updated_at;
     // TODO: model permissions
     // std::vector<permission> permissions;
-    uint64_t subscribers_count;
-    uint64_t network_count;
+    boost::optional<uint64_t> subscribers_count;
+    boost::optional<uint64_t> network_count;
     // TODO: model license
     // github::license license;
   };
