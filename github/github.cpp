@@ -50,7 +50,11 @@ int main(int argc, char **argv)
 
   try
   {
-    github::repository::list();
+    std::vector<github::repository> repos = github::repository::list();
+    for (const auto& repo : repos)
+    {
+      std::cout << repo.id << ":" << repo.full_name << "\n";
+    }
 
     return EXIT_SUCCESS;
   }
