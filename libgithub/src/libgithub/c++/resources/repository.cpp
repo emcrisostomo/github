@@ -16,6 +16,7 @@
 
 #include "repository.h"
 #include "../rest/rest_client.h"
+#include "../json/json.hpp"
 #include <stdexcept>
 #include <iostream>
 #include <string>
@@ -90,7 +91,7 @@ std::vector<github::repository> github::repository::list()
       repo.teams_url = r["teams_url"].GetString();
       repo.trees_url = r["trees_url"].GetString();
       repo.clone_url = r["clone_url"].GetString();
-      repo.mirror_url = r["mirror_url"].GetString();
+      repo.mirror_url = json::json_optional_value<std::string>(r, "mirror_url");
       repo.hooks_url = r["hooks_url"].GetString();
       repo.svn_url = r["svn_url"].GetString();
       repo.homepage = r["homepage"].GetString();

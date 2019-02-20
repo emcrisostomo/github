@@ -19,6 +19,7 @@
 
 #include <string>
 #include <vector>
+#include <boost/optional.hpp>
 #include "contributor.h"
 #include "language.h"
 #include "user.h"
@@ -95,7 +96,7 @@ namespace github
     std::string teams_url;
     std::string trees_url;
     std::string clone_url;
-    std::string mirror_url;
+    boost::optional<std::string> mirror_url;
     std::string hooks_url;
     std::string svn_url;
     std::string homepage;
