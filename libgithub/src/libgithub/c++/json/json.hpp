@@ -25,7 +25,7 @@ namespace github
     bool json_has_field(const rapidjson::Value& json, const char *name)
     {
       const auto itr = json.FindMember(name);
-      return !(itr == json.MemberEnd());
+      return !(itr == json.MemberEnd() || itr->value.IsNull());
     }
 
     template<typename T>
