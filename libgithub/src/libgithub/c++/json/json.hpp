@@ -39,6 +39,7 @@ namespace github
     }
 
     template<>
+    inline
     boost::optional<std::string>
     json_optional_value(const rapidjson::Value& json,
                         const char *name)
