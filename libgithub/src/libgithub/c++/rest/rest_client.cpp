@@ -39,16 +39,14 @@ namespace github
     {
       std::smatch fragments;
 
-      if (std::regex_match(link, fragments, link_regex))
-      {
-        if (fragments[2].compare("next") == 0)
-        {
-          return fragments[1];
-        }
-      }
-      else
+      if (!std::regex_match(link, fragments, link_regex))
       {
         throw std::runtime_error("Failed to parse link fragment");
+      }
+
+      if (fragments[2].compare("next") == 0)
+      {
+        return fragments[1];
       }
     }
 
