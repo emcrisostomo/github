@@ -32,7 +32,7 @@
 static bool verbose_flag = false;
 static int version_flag = false;
 
-static bool parse_optsss(int argc, char **argv);
+static bool parse_opts(int argc, char **argv);
 static void usage(std::ostream& stream);
 static void print_version(std::ostream& stream);
 
@@ -45,7 +45,7 @@ int main(int argc, char **argv)
   textdomain(PACKAGE);
 #endif
 
-  if (!parse_optsss(argc, argv))
+  if (!parse_opts(argc, argv))
     return EXIT_FAILURE;
 
   try
@@ -79,7 +79,7 @@ int main(int argc, char **argv)
   }
 }
 
-static bool parse_optsss(int argc, char **argv)
+static bool parse_opts(int argc, char **argv)
 {
   int ch;
   std::string short_options = "hv";
