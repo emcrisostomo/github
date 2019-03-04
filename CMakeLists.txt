@@ -77,8 +77,10 @@ endif ()
 # Add a configuration file processed by cmake
 configure_file(${PROJECT_SOURCE_DIR}/config.h.in ${PROJECT_BINARY_DIR}/config.h)
 
+enable_testing()
 add_subdirectory(libgithub)
 add_subdirectory(github)
+add_subdirectory(tests)
 
 # installer
 include(InstallRequiredSystemLibraries)
