@@ -60,7 +60,8 @@ endif ()
 target_include_directories(libgithub PRIVATE ..)
 target_include_directories(libgithub PUBLIC src)
 target_include_directories(libgithub PRIVATE ${PROJECT_BINARY_DIR})
-target_include_directories(libgithub PUBLIC Boost::boost)
+# This should use the imported target Boost::boost but it's not working
+target_include_directories(libgithub PUBLIC ${Boost_INCLUDE_DIRS})
 target_link_libraries(libgithub PRIVATE CURL::libcurl)
 
 install(TARGETS libgithub DESTINATION lib)
