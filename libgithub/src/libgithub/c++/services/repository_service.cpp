@@ -105,7 +105,7 @@ namespace github
 
 
   std::vector<repository>
-  repository_service::list(std::string user)
+  repository_service::list(const std::string& user) const
   {
     github::rest_client rest;
     rest.get("https://api.github.com/users/" + user + "/repos", true);
@@ -125,7 +125,7 @@ namespace github
   }
 
   std::vector<repository>
-  repository_service::list()
+  repository_service::list() const
   {
     github::rest_client rest;
     rest.get("https://api.github.com/user/repos", true);

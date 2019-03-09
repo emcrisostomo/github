@@ -25,8 +25,8 @@ namespace github
   class repository_service
   {
   public:
-    std::vector<repository> list();
-    std::vector<repository> list(std::string user);
+    std::vector<repository> list() const;
+    std::vector<repository> list(const std::string& user) const;
     std::vector<repository> list_public();
     std::vector<repository> create();
     void destroy();
