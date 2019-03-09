@@ -18,6 +18,9 @@ include(CTest)
 link_libraries(libgithub)
 
 add_executable(repo-list repo-list.cpp)
+add_executable(repo-list-user repo-list-user.cpp)
 
 add_test(repo-list repo-list)
 set_tests_properties(repo-list PROPERTIES PASS_REGULAR_EXPRESSION "^$")
+add_test(repo-list-user repo-list-user)
+set_tests_properties(repo-list-user PROPERTIES PASS_REGULAR_EXPRESSION "^$")
