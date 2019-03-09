@@ -1,9 +1,10 @@
 #include <iostream>
 #include <vector>
-#include "libgithub/c++/resources/repository.h"
+#include "libgithub/c++/services/repository_service.hpp"
 
 int main(int argc, char **argv)
 {
-    std::vector<github::repository> repos = github::repository::list();
+    github::repository_service svc;
+    std::vector<github::repository> repos = svc.list();
     return 0;
 }

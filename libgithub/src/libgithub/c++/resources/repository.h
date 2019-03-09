@@ -33,20 +33,12 @@ namespace github
   class repository
   {
   public:
-    static std::vector<repository> list();
-    static std::vector<repository> list(std::string user);
-    static std::vector<repository> list_public();
-
-  public:
-    std::vector<repository> create();
-    void destroy();
     std::vector<contributor> get_contributors();
     std::vector<language> get_languages();
     std::vector<tag> get_tags();
     std::vector<team> get_team();
     std::vector<topic> get_topics();
     void set_topics(std::vector<topic> topics);
-    void transfer(std::string user, std::vector<unsigned int> team_ids);
 
     uint64_t id;
     std::string node_id;

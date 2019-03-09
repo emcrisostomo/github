@@ -19,13 +19,14 @@
 #include "libgithub/c/libgithub.h"
 #include "libgithub/c++/exceptions/api_error.hpp"
 #include "libgithub/c++/exceptions/curl_exception.hpp"
-#include "libgithub/c++/resources/repository.h"
+#include "libgithub/c++/services/repository_service.hpp"
 #include <clocale>
 #include <string>
 #include <stdexcept>
 #include <getopt.h>
 #include <iostream>
 #include <cstdlib>
+#include <libgithub/src/libgithub/c++/services/repository_service.hpp>
 
 #define _(String) gettext(String)
 
@@ -50,7 +51,8 @@ int main(int argc, char **argv)
 
   try
   {
-    std::vector<github::repository> repos = github::repository::list();
+    github::repository_service svc;
+    std::vector<github::repository> repos = svc.list();
     for (const auto& repo : repos)
     {
       std::cout << repo.id << ":" << repo.full_name << "\n";

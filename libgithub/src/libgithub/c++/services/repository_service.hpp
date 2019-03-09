@@ -14,4 +14,24 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "repository.h"
+#ifndef GITHUB_REPOSITORY_SERVICE_H
+#define GITHUB_REPOSITORY_SERVICE_H
+
+#include <vector>
+#include "../resources/repository.h"
+
+namespace github
+{
+  class repository_service
+  {
+  public:
+    std::vector<repository> list();
+    std::vector<repository> list(std::string user);
+    std::vector<repository> list_public();
+    std::vector<repository> create();
+    void destroy();
+    void transfer(std::string user, std::vector<unsigned int> team_ids);    
+  };
+};
+
+#endif //GITHUB_REPOSITORY_SERVICE_H
