@@ -103,14 +103,10 @@ namespace github
     return repo;
   }
 
-
+  static
   std::vector<repository>
-  repository_service::list(const std::string& user) const
+  from_api(const std::vector<rapidjson::Document>& documents)
   {
-    github::rest_client rest;
-    rest.get("https://api.github.com/users/" + user + "/repos", true);
-    std::vector<rapidjson::Document> documents = rest.get_paginated_bodies_as_json();
-
     std::vector<github::repository> repositories;
 
     for (const auto& doc : documents)
@@ -125,22 +121,22 @@ namespace github
   }
 
   std::vector<repository>
+  repository_service::list(const std::string& user) const
+  {
+    github::rest_client rest;
+    rest.get("https://api.github.com/users/" + user + "/repos", true);
+    std::vector<rapidjson::Document> documents = rest.get_paginated_bodies_as_json();
+
+    return from_api(documents);
+  }
+
+  std::vector<repository>
   repository_service::list() const
   {
     github::rest_client rest;
     rest.get("https://api.github.com/user/repos", true);
     std::vector<rapidjson::Document> documents = rest.get_paginated_bodies_as_json();
 
-    std::vector<github::repository> repositories;
-
-    for (const auto& doc : documents)
-    {
-      for (rapidjson::SizeType i = 0; i < doc.Size(); ++i)
-      {
-        repositories.push_back(parse_repo(doc[i]));
-      }
-    }
-
-    return repositories;
+    return from_api(documents);
   }
 }
