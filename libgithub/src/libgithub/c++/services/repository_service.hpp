@@ -27,7 +27,7 @@ namespace github
   public:
     std::vector<repository> list() const;
     std::vector<repository> list(const std::string& user) const;
-    std::vector<repository> list_public();
+    std::vector<repository> list_public() const;
     std::vector<repository> create();
     void destroy();
     void transfer(std::string user, std::vector<unsigned int> team_ids);
