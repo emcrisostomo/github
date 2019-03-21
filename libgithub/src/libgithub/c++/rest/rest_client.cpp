@@ -175,7 +175,7 @@ void rest_client::get(const std::string& url)
   CURLcode res = perform_call();
 
   // TODO: encapsulate check
-  if (!(res == CURLE_OK))
+  if (res != CURLE_OK)
   {
     throw curl_exception(res, err_buffer);
   }
