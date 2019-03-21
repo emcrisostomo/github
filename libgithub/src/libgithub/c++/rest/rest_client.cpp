@@ -22,7 +22,7 @@
 
 namespace github
 {
-static struct curl_slist *get_default_header_list();
+static std::unique_ptr<struct curl_slist, std::function<void(struct curl_slist *)>> get_default_header_list();
 
 static void curl_deleter(CURL *curl)
 {
@@ -161,7 +161,7 @@ CURLcode rest_client::perform_call()
   return curl_easy_perform(curl.get());
 }
 
-struct curl_slist *
+std::unique_ptr<struct curl_slist, std::function<void(struct curl_slist *)>>
 get_default_header_list()
 {
   struct curl_slist *headers = nullptr;
@@ -169,7 +169,7 @@ get_default_header_list()
   headers = curl_slist_append(headers, "cache-control: no-cache");
   headers = curl_slist_append(headers, "User-Agent: github C/CPP library");
 
-  return headers;
+  return std::unique_ptr<struct curl_slist, std::function<void(struct curl_slist *)>>(headers, curl_slist_free_all);
 }
 
 void rest_client::get(const std::string& url)
@@ -179,8 +179,8 @@ void rest_client::get(const std::string& url)
   curl_easy_setopt(curl.get(), CURLOPT_URL,           url.c_str());
   // @formatter:on
 
-  struct curl_slist *headers = get_default_header_list();
-  curl_easy_setopt(curl.get(), CURLOPT_HTTPHEADER, headers);
+  std::unique_ptr<struct curl_slist, std::function<void(struct curl_slist *)>> headers = get_default_header_list();
+  curl_easy_setopt(curl.get(), CURLOPT_HTTPHEADER, headers.get());
 
   CURLcode res = perform_call();
 
