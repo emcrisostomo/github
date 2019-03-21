@@ -34,8 +34,8 @@ namespace github
     virtual ~rest_client();
 
     void get(const std::string& url);
-    void get_all_pages(const std::string& url);
     void get_page(const std::string& url, size_t page);
+    void get_all_pages(const std::string& url);
     std::vector<std::string> get_paginated_bodies() const;
     std::vector<rapidjson::Document> get_paginated_bodies_as_json() const;
 
