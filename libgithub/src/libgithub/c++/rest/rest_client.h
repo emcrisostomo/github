@@ -33,7 +33,9 @@ namespace github
     rest_client();
     virtual ~rest_client();
 
-    void get(const std::string& url, bool paginated = false);
+    void get(const std::string& url);
+    void get_all_pages(const std::string& url);
+    void get_page(const std::string& url, size_t page);
     std::vector<std::string> get_paginated_bodies() const;
     std::vector<rapidjson::Document> get_paginated_bodies_as_json() const;
 
@@ -45,6 +47,7 @@ namespace github
   private:
     std::unique_ptr<CURL, std::function<void(CURL *)>> curl;
     std::string body;
+    unsigned long response_code;
     std::map<std::string, std::string> header_map;
     std::vector<std::string> paginated_bodies;
     char err_buffer[CURL_ERROR_SIZE]{};

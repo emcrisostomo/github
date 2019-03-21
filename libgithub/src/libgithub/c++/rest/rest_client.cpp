@@ -137,6 +137,7 @@ void rest_client::cleanup_pre_call()
   err_buffer[0] = '\0';
   body = "";
   header_map.clear();
+  response_code = {};
 }
 
 void rest_client::set_common_opts()
@@ -158,45 +159,50 @@ CURLcode rest_client::perform_call()
   return curl_easy_perform(curl.get());
 }
 
-void rest_client::get(const std::string& url, bool paginated)
+void rest_client::get(const std::string& url)
 {
+  // @formatter:off
+  curl_easy_setopt(curl.get(), CURLOPT_CUSTOMREQUEST, "GET");
+  curl_easy_setopt(curl.get(), CURLOPT_URL,           url.c_str());
+  // @formatter:on
+
+  struct curl_slist *headers = nullptr;
+  headers = curl_slist_append(headers, "Accept: application/vnd.github.v3+json");
+  headers = curl_slist_append(headers, "cache-control: no-cache");
+  headers = curl_slist_append(headers, "User-Agent: github C/CPP library");
+  curl_easy_setopt(curl.get(), CURLOPT_HTTPHEADER, headers);
+
+  CURLcode res = perform_call();
+
+  // TODO: encapsulate check
+  if (!(res == CURLE_OK))
+  {
+    throw curl_exception(res, err_buffer);
+  }
+
+  curl_easy_getinfo(curl.get(), CURLINFO_RESPONSE_CODE, &response_code);
+
+  // TODO: encapsulate and parametrise check
+  if (response_code != 200)
+  {
+    throw api_error(response_code);
+  }
+}
+
+void rest_client::get_all_pages(const std::string& url)
+{
+  // TODO: is this the best place to clean it?
+  paginated_bodies.clear();
+  paginated_bodies.resize(0);
   std::string next_page_url = url;
 
   while (!next_page_url.empty())
   {
-    // @formatter:off
-      curl_easy_setopt(curl.get(), CURLOPT_CUSTOMREQUEST,  "GET");
-      curl_easy_setopt(curl.get(), CURLOPT_URL,            next_page_url.c_str());
-      // @formatter:on
-
-    struct curl_slist *headers = nullptr;
-    headers = curl_slist_append(headers, "Accept: application/vnd.github.v3+json");
-    headers = curl_slist_append(headers, "cache-control: no-cache");
-    headers = curl_slist_append(headers, "User-Agent: github C/CPP library");
-    curl_easy_setopt(curl.get(), CURLOPT_HTTPHEADER, headers);
-
-    CURLcode res = perform_call();
-
-    // TODO: encapsulate check
-    if (!(res == CURLE_OK))
-    {
-      throw curl_exception(res, err_buffer);
-    }
-
-    // TODO: save response code
-    unsigned long response_code;
-    curl_easy_getinfo(curl.get(), CURLINFO_RESPONSE_CODE, &response_code);
-
-    // TODO: encapsulate and parametrise check
-    if (response_code != 200)
-    {
-      throw api_error(response_code);
-    }
-
-    paginated_bodies.push_back(std::move(body));
+    this->get(next_page_url);
+    paginated_bodies.push_back(body);
 
     next_page_url = {};
-    if (paginated && header_map.find("Link") != header_map.end())
+    if (header_map.find("Link") != header_map.end())
     {
       std::string link_header = header_map["Link"];
       std::vector<std::string> links = get_links(link_header);

@@ -124,7 +124,7 @@ namespace github
   repository_service::list(const std::string& user) const
   {
     github::rest_client rest;
-    rest.get("https://api.github.com/users/" + user + "/repos", true);
+    rest.get_all_pages("https://api.github.com/users/" + user + "/repos");
     std::vector<rapidjson::Document> documents = rest.get_paginated_bodies_as_json();
 
     return from_api(documents);
@@ -134,7 +134,7 @@ namespace github
   repository_service::list() const
   {
     github::rest_client rest;
-    rest.get("https://api.github.com/user/repos", true);
+    rest.get_all_pages("https://api.github.com/user/repos");
     std::vector<rapidjson::Document> documents = rest.get_paginated_bodies_as_json();
 
     return from_api(documents);
@@ -144,7 +144,8 @@ namespace github
   repository_service::list_public() const
   {
     github::rest_client rest;
-    rest.get("https://api.github.com/repositories", true);
+    // TODO: this call should be paginated externally
+    rest.get("https://api.github.com/repositories");
     std::vector<rapidjson::Document> documents = rest.get_paginated_bodies_as_json();
 
     return from_api(documents);
