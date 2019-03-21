@@ -22,6 +22,8 @@
 
 namespace github
 {
+static struct curl_slist *get_default_header_list();
+
 static void curl_deleter(CURL *curl)
 {
   curl_easy_cleanup(curl);
@@ -159,6 +161,17 @@ CURLcode rest_client::perform_call()
   return curl_easy_perform(curl.get());
 }
 
+struct curl_slist *
+get_default_header_list()
+{
+  struct curl_slist *headers = nullptr;
+  headers = curl_slist_append(headers, "Accept: application/vnd.github.v3+json");
+  headers = curl_slist_append(headers, "cache-control: no-cache");
+  headers = curl_slist_append(headers, "User-Agent: github C/CPP library");
+
+  return headers;
+}
+
 void rest_client::get(const std::string& url)
 {
   // @formatter:off
@@ -166,10 +179,7 @@ void rest_client::get(const std::string& url)
   curl_easy_setopt(curl.get(), CURLOPT_URL,           url.c_str());
   // @formatter:on
 
-  struct curl_slist *headers = nullptr;
-  headers = curl_slist_append(headers, "Accept: application/vnd.github.v3+json");
-  headers = curl_slist_append(headers, "cache-control: no-cache");
-  headers = curl_slist_append(headers, "User-Agent: github C/CPP library");
+  struct curl_slist *headers = get_default_header_list();
   curl_easy_setopt(curl.get(), CURLOPT_HTTPHEADER, headers);
 
   CURLcode res = perform_call();
